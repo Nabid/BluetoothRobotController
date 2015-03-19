@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Bluetooth Device Controller</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+	<string name="text_standby">Stand By</string>
+	<string name="text_top_left">top left</string>
+	<string name="text_up">up</string>
+	<string name="text_top_right">top right</string>
+	<string name="text_left">left</string>
+	<string name="text_right">right</string>
+	<string name="text_bottom_left">bottom left</string>
+	<string name="text_down">down</string>
+	<string name="text_bottom_right">bottom right</string>
+	<string name="text_enable_bluetooth">Enable Bluetooth</string>
+
+</resources>
