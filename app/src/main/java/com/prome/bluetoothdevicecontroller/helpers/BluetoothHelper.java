@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -16,6 +17,8 @@ import android.util.Log;
 import com.prome.bluetoothdevicecontroller.activities.MainActivity;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
@@ -43,13 +46,14 @@ public class BluetoothHelper implements Runnable {
 	public static final int REQUEST_ENABLE_BT = 1001;
 
 	// save found bluetooth devices in range
-	ArrayList<BluetoothDevice> foundDevices = new ArrayList<>();
+	private ArrayList<BluetoothDevice> foundDevices = new ArrayList<>();
 
 	// progress dialog
 	ProgressDialog progress;
 
 	// socket
 	private BluetoothSocket mBluetoothSocket;
+	private BluetoothServerSocket mBluetoothServerSocket;
 
 	// uuid
 	private UUID uuid = UUID.randomUUID();
@@ -59,6 +63,10 @@ public class BluetoothHelper implements Runnable {
 
 	// save context
 	private Context context;
+
+	// input and output stream
+	private InputStream inputStream;
+	private OutputStream outputStream;
 
 	// constructor
 	private BluetoothHelper(Context context) {
@@ -167,6 +175,13 @@ public class BluetoothHelper implements Runnable {
 		bluetoothAdapter.startDiscovery();
 	}
 
+	/**
+	 * shows the progress dialog
+	 *
+	 * @param context
+	 * @param message
+	 */
+
 	private void showProgress(Context context, String message) {
 		progress = new ProgressDialog(context);
 		progress.setMessage(message);
@@ -177,12 +192,18 @@ public class BluetoothHelper implements Runnable {
 		progress.show();
 	}
 
+	/**
+	 * hides the progress dialog
+	 */
 	private void hideProgress() {
 		if(progress.isShowing()) {
 			progress.dismiss();
 		}
 	}
 
+	/**
+	 * BroadcastReceiver for device discovery
+	 */
 	private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
@@ -229,13 +250,18 @@ public class BluetoothHelper implements Runnable {
 		return foundDevices;
 	}
 
+	/**
+	 * connects to Bluetooth device
+	 *
+	 * @param device
+	 */
 	public void connectToBTDevice(BluetoothDevice device) {
 		// get bluetooth device by address
 		bluetoothDevice = bluetoothAdapter.getRemoteDevice(device.getAddress());
 
 		// show dialog connecting
-		showProgress(context, "Connecting..."+"\n"+device.getName()+"\n"+device.getAddress());
-		Log.d(BluetoothHelper.TAG, "Connecting..."+"name: "+device.getName()+", address: "+device.getAddress());
+		showProgress(context, "Connecting..." + "\n" + device.getName() + "\n" + device.getAddress());
+		Log.d(BluetoothHelper.TAG, "Connecting..." + "name: " + device.getName() + ", address: " + device.getAddress());
 
 		// create new thread
 		Thread bluetoothConnectThread = new Thread(this);
@@ -261,6 +287,34 @@ public class BluetoothHelper implements Runnable {
 
 			Log.d(BluetoothHelper.TAG, "connected to device");
 
+			// get the input and output stream
+			try {
+				inputStream = mBluetoothSocket.getInputStream();
+				outputStream = mBluetoothSocket.getOutputStream();
+			} catch(IOException e) {
+				e.printStackTrace();
+			}
+
+			// buffer to save recieved data from bluetooth device
+			byte[] buffer = new byte[1024];
+			int bytes;
+
+			// send test data
+			sendDataToBTDevice("A");
+
+			while(true) {
+				try {
+					// read from input stream of the bluetooth socket
+					bytes = inputStream.read(buffer);
+					// do something with buffer
+					// ..........................
+					Log.d(TAG, "data recieved: "+buffer.toString());
+				} catch(IOException e) {
+					e.printStackTrace();
+					Log.d(TAG, "disconnected", e);
+				}
+			}
+
 			// send empty message
 			//mHandler.sendEmptyMessage(0);
 
@@ -276,6 +330,40 @@ public class BluetoothHelper implements Runnable {
 			} catch(IOException e1) {
 				e1.printStackTrace();
 				Log.d(BluetoothHelper.TAG, "socket could not be closed");
+			}
+		}
+	}
+
+	/**
+	 * disconnects bluetooth device connection
+	 */
+	public void disconnectBTConnection() {
+		// check if connected to a bluetooth device
+		if(mBluetoothSocket.isConnected()) {
+			// disconnect
+			try {
+				mBluetoothSocket.close();
+				Log.d(TAG, "device disconnected successfully");
+			} catch(IOException e) {
+				e.printStackTrace();
+				Log.d(TAG, "error while disconnecting device", e);
+			}
+		}
+	}
+
+	/**
+	 * sends string to bluetooth device
+	 * @param str
+	 */
+	public void sendDataToBTDevice(String str) {
+		// check if connected to a bluetooth device
+		if(mBluetoothSocket.isConnected()) {
+			try {
+				outputStream.write(str.getBytes());
+				Log.d(TAG, "data send: " + str);
+			} catch(IOException e) {
+				e.printStackTrace();
+				Log.d(TAG, "data could not be sent", e);
 			}
 		}
 	}
