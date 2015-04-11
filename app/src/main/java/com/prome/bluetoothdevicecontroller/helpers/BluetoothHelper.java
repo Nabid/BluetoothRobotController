@@ -283,7 +283,12 @@ public class BluetoothHelper implements Runnable {
 			// already cancelled
 
 			// connect through socket
-			mBluetoothSocket.connect();
+			try {
+				mBluetoothSocket.connect();
+			} catch(Exception e) {
+				Log.d(TAG, "socket connection error", e);
+				e.printStackTrace();
+			}
 
 			Log.d(BluetoothHelper.TAG, "connected to device");
 
