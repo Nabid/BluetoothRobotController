@@ -3,18 +3,17 @@
 			  android:orientation="vertical"
 			  android:layout_width="match_parent"
 			  android:layout_height="match_parent"
-			  android:weightSum="4">
+			  android:weightSum="5">
 
 	<LinearLayout
-		android:layout_width="wrap_content"
+		android:layout_width="match_parent"
 		android:layout_height="0dp"
 		android:layout_weight="1"
-		android:layout_gravity="center">
+		android:gravity="center">
 
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_gravity="center"
 			android:text="@string/text_standby"
 			android:textSize="@dimen/abc_text_size_headline_material"
 			android:textColor="@color/accent_material_light"/>
@@ -28,28 +27,35 @@
 		android:orientation="horizontal"
 		android:layout_weight="1"
 		android:layout_height="0dp"
-		android:weightSum="3">
+		android:weightSum="4">
 
 		<Button
 			android:layout_width="0dp"
 			android:layout_height="match_parent"
-			android:id="@+id/touchcontrol_topleft"
+			android:id="@+id/touchcontrol_1_1"
 			android:layout_weight="1"
-			android:text="@string/text_top_left"/>
+			android:background="@drawable/ic_action_collapse"/>
 
 		<Button
 			android:layout_width="0dp"
 			android:layout_height="match_parent"
 			android:id="@+id/touchcontrol_up"
 			android:layout_weight="1"
-			android:text="@string/text_up"/>
+			android:background="@drawable/ic_action_collapse"/>
 
 		<Button
 			android:layout_width="0dp"
 			android:layout_height="match_parent"
-			android:id="@+id/touchcontrol_topright"
+			android:id="@+id/touchcontrol_1_3"
 			android:layout_weight="1"
-			android:text="@string/text_top_right"/>
+			android:background="@drawable/ic_action_collapse"/>
+
+		<Button
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:id="@+id/touchcontrol_1_4"
+			android:layout_weight="1"
+			android:background="@drawable/ic_action_forward"/>
 
 	</LinearLayout>
 
@@ -61,14 +67,14 @@
 		android:layout_height="0dp"
 		android:id="@+id/linearlayout_touchcontroller_2"
 		android:orientation="horizontal"
-		android:weightSum="3">
+		android:weightSum="4">
 
 		<Button
 			android:layout_width="0dp"
 			android:layout_height="match_parent"
 			android:id="@+id/touchcontrol_left"
 			android:layout_weight="1"
-			android:text="@string/text_left"/>
+			android:background="@drawable/ic_action_previous_item"/>
 
 		<Button
 			android:layout_width="0dp"
@@ -81,7 +87,14 @@
 			android:layout_height="match_parent"
 			android:id="@+id/touchcontrol_right"
 			android:layout_weight="1"
-			android:text="@string/text_right"/>
+			android:background="@drawable/ic_action_next_item"/>
+
+		<Button
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:id="@+id/touchcontrol_2_4"
+			android:layout_weight="1"
+			android:background="@drawable/ic_action_forward"/>
 
 	</LinearLayout>
 
@@ -93,29 +106,87 @@
 		android:layout_height="0dp"
 		android:id="@+id/linearlayout_touchcontroller_3"
 		android:orientation="horizontal"
-		android:weightSum="3">
+		android:weightSum="4">
 
 		<Button
 			android:layout_width="0dp"
 			android:layout_height="match_parent"
-			android:id="@+id/touchcontrol_bottomleft"
+			android:id="@+id/touchcontrol_3_1"
 			android:layout_weight="1"
-			android:text="@string/text_bottom_left"/>
+			android:background="@drawable/ic_action_collapse"/>
 
 		<Button
 			android:layout_width="0dp"
 			android:layout_height="match_parent"
 			android:id="@+id/touchcontrol_down"
 			android:layout_weight="1"
-			android:text="@string/text_down"/>
+			android:background="@drawable/ic_action_expand"/>
 
 		<Button
 			android:layout_width="0dp"
 			android:layout_height="match_parent"
-			android:id="@+id/touchcontrol_bottomright"
+			android:id="@+id/touchcontrol_3_3"
+			android:layout_weight="1"/>
+
+		<Button
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:id="@+id/touchcontrol_3_4"
+			android:layout_weight="1"/>
+
+	</LinearLayout>
+
+	<!-- rotation -->
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_weight="1"
+		android:layout_height="0dp"
+		android:id="@+id/linearlayout_touchcontroller_4"
+		android:orientation="horizontal"
+		android:weightSum="4">
+
+		<Button
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:id="@+id/touchcontrol_4_1"
 			android:layout_weight="1"
-			android:text="@string/text_bottom_right"/>
+			android:background="@drawable/ic_action_back"/>
+
+		<Button
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:id="@+id/touchcontrol_4_2"
+			android:layout_weight="1"
+			android:background="@drawable/ic_action_forward"/>
+
+		<Button
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:id="@+id/touchcontrol_4_3"
+			android:layout_weight="1"
+			android:background="@drawable/ic_action_rotate_left"/>
+
+		<Button
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:id="@+id/touchcontrol_4_4"
+			android:layout_weight="1"
+			android:background="@drawable/ic_action_rotate_right"/>
 
 	</LinearLayout>
 
 </LinearLayout>
+
+
+	<!-- <?xml version="1.0" encoding="utf-8"?>
+<GridView xmlns:android="http://schemas.android.com/apk/res/android"
+		  android:id="@+id/fragment_touch_gridview"
+		  android:layout_width="match_parent"
+		  android:layout_height="match_parent"
+		  android:columnWidth="90dp"
+		  android:numColumns="4"
+		  android:verticalSpacing="10dp"
+		  android:horizontalSpacing="10dp"
+		  android:stretchMode="columnWidth"
+		  android:gravity="center"
+/> -->

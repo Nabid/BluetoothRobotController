@@ -2,7 +2,7 @@ package com.prome.bluetoothdevicecontroller.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 import java.util.ArrayList;
 
@@ -11,9 +11,9 @@ import java.util.ArrayList;
  * @version v1.0
  * @see android.support.v4.app.FragmentPagerAdapter
  * @see android.support.v4.view.PagerAdapter
- * Custom ViewPager Adapter
+ * Custom State ViewPager Adapter
  */
-public class CustomViewPagerAdapter extends FragmentPagerAdapter {
+public class CustomStateViewPagerAdapter extends FragmentStatePagerAdapter {
 
 	// fragment list
 	private ArrayList<Fragment> fragments;
@@ -21,7 +21,7 @@ public class CustomViewPagerAdapter extends FragmentPagerAdapter {
 	private ArrayList<String> titles;
 
 	// default constructor
-	public CustomViewPagerAdapter(FragmentManager fm) {
+	public CustomStateViewPagerAdapter(FragmentManager fm) {
 		super(fm);
 	}
 

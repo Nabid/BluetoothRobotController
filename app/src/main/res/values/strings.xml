@@ -15,5 +15,16 @@
 	<string name="text_down">down</string>
 	<string name="text_bottom_right">bottom right</string>
 	<string name="text_enable_bluetooth">Enable Bluetooth</string>
+	<string name="bluetooth_connectivity_text">NOT CONNECTED</string>
+	<string name="refresh_bt">Refresh Bluetooth Status</string>
+	<string name="connect_bt">Connect Bluetooth</string>
+	<string name="tap_voice_button">Tap to start</string>
+	<string name="text_get_paired_devices">Get Paired Devices</string>
+	<string name="text_scan_devices">Scan Bluetooth Devices</string>
+	<string name="text_bt_enable">Enable Bluetooth</string>
+	<string name="text_bt_disable">Disable Bluetooth</string>
+
+	<string name="speech_prompt">Say something&#8230;</string>
+	<string name="text_discoverable">Make Discoverable</string>
 
 </resources>

@@ -91,19 +91,40 @@ public class TouchControllerFragment extends Fragment {
 				.into(bottomRight);
 	}
 	*/
+
 	private void init() {
 		// initialize linear layouts
 		linearLayout1 = (LinearLayout) getActivity().findViewById(R.id.linearlayout_touchcontroller_1);
 		linearLayout2 = (LinearLayout) getActivity().findViewById(R.id.linearlayout_touchcontroller_2);
 		linearLayout3 = (LinearLayout) getActivity().findViewById(R.id.linearlayout_touchcontroller_3);
 		// initialize image views
-		topLeft = (Button) getActivity().findViewById(R.id.touchcontrol_topleft);
-		topRight = (Button) getActivity().findViewById(R.id.touchcontrol_topright);
-		bottomLeft = (Button) getActivity().findViewById(R.id.touchcontrol_bottomleft);
-		bottomRight = (Button) getActivity().findViewById(R.id.touchcontrol_bottomright);
+		topLeft = (Button) getActivity().findViewById(R.id.touchcontrol_1_1);
+		topRight = (Button) getActivity().findViewById(R.id.touchcontrol_1_3);
+		bottomLeft = (Button) getActivity().findViewById(R.id.touchcontrol_3_1);
+		bottomRight = (Button) getActivity().findViewById(R.id.touchcontrol_3_3);
+
 		left = (Button) getActivity().findViewById(R.id.touchcontrol_left);
 		right = (Button) getActivity().findViewById(R.id.touchcontrol_right);
-		up = (Button) getActivity().findViewById(R.id.touchcontrol_up);
-		down = (Button) getActivity().findViewById(R.id.touchcontrol_down);
+
+		up = (Button) getActivity().findViewById(R.id.touchcontrol_1_4);
+		down = (Button) getActivity().findViewById(R.id.touchcontrol_2_4);
+
+		topLeft.setRotation(-45f);
+		topLeft.setBackgroundResource(R.drawable.ic_action_collapse);
+
+		topRight.setRotation(45f);
+		topRight.setBackgroundResource(R.drawable.ic_action_collapse);
+
+		bottomLeft.setRotation(-135f);
+		bottomLeft.setBackgroundResource(R.drawable.ic_action_collapse);
+
+		bottomRight.setRotation(135f);
+		bottomRight.setBackgroundResource(R.drawable.ic_action_collapse);
+
+		up.setRotation(-90f);
+		up.setBackgroundResource(R.drawable.ic_action_forward);
+
+		down.setRotation(90f);
+		down.setBackgroundResource(R.drawable.ic_action_forward);
 	}
 }

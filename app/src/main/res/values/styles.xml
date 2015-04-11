@@ -9,4 +9,6 @@
 
 	</style>
 
+	<color name="custom_text_red">#ff0000</color>
+
 </resources>
