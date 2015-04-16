@@ -15,6 +15,7 @@ import android.os.Message;
 import android.util.Log;
 
 import com.prome.bluetoothdevicecontroller.activities.MainActivity;
+import com.prome.bluetoothdevicecontroller.services.BluetoothChatService;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,6 +33,22 @@ import java.util.UUID;
  * @see <a href="http://developer.android.com/guide/topics/connectivity/bluetooth.html">http://developer.android.com/guide/topics/connectivity/bluetooth.html</a>
  */
 public class BluetoothHelper implements Runnable {
+
+	// Message types sent from the BluetoothChatService Handler
+	public static final int MESSAGE_STATE_CHANGE = 1;
+	public static final int MESSAGE_READ = 2;
+	public static final int MESSAGE_WRITE = 3;
+	public static final int MESSAGE_DEVICE_NAME = 4;
+	public static final int MESSAGE_TOAST = 5;
+
+	// Key names received from the BluetoothChatService Handler
+	public static final String DEVICE_NAME = "device_name";
+	public static final String TOAST = "toast";
+
+	// Intent request codes
+	private static final int REQUEST_CONNECT_DEVICE = 1;
+
+
 	// tag
 	public static final String TAG = "BluetoothHelper";
 
@@ -39,27 +56,29 @@ public class BluetoothHelper implements Runnable {
 	private static BluetoothHelper bluetoothHelper = null;
 
 	// bluetooth adapter
-	private static BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+	//private static BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+	backport.android.bluetooth.BluetoothAdapter bluetoothAdapter = null;
 
 	// local integer > 0, taking random int which may not conflict
 	// with other requestCode
 	public static final int REQUEST_ENABLE_BT = 1001;
 
 	// save found bluetooth devices in range
-	private ArrayList<BluetoothDevice> foundDevices = new ArrayList<>();
+	private ArrayList<backport.android.bluetooth.BluetoothDevice> foundDevices = new ArrayList<>();
 
 	// progress dialog
 	ProgressDialog progress;
 
 	// socket
-	private BluetoothSocket mBluetoothSocket;
-	private BluetoothServerSocket mBluetoothServerSocket;
+	//private BluetoothSocket mBluetoothSocket;
+	backport.android.bluetooth.BluetoothSocket mBluetoothSocket;
 
 	// uuid
 	private UUID uuid = UUID.randomUUID();
 
 	// bluetooth device
-	private BluetoothDevice bluetoothDevice;
+	//private BluetoothDevice bluetoothDevice;
+	backport.android.bluetooth.BluetoothDevice bluetoothDevice;
 
 	// save context
 	private Context context;
@@ -93,6 +112,11 @@ public class BluetoothHelper implements Runnable {
 		return true;
 	}
 
+	public void setBluetoothAdapter() {
+		bluetoothAdapter
+				= backport.android.bluetooth.BluetoothAdapter.getDefaultAdapter();
+	}
+
 	/**
 	 * Enables Bluetooth
 	 *
@@ -116,9 +140,9 @@ public class BluetoothHelper implements Runnable {
 	 *
 	 * @return deviceList
 	 */
-	public ArrayList<BluetoothDevice> getPairedDevices() {
-		Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
-		ArrayList<BluetoothDevice> deviceList = new ArrayList<>();
+	public ArrayList<backport.android.bluetooth.BluetoothDevice> getPairedDevices() {
+		Set<backport.android.bluetooth.BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
+		ArrayList<backport.android.bluetooth.BluetoothDevice> deviceList = new ArrayList<>();
 
 		// check has paired devices or not
 		if(pairedDevices.size() > 0) {
@@ -126,7 +150,7 @@ public class BluetoothHelper implements Runnable {
 			//deviceList = new ArrayList<>();
 
 			// get names, address and its type
-			for(BluetoothDevice device : pairedDevices) {
+			for(backport.android.bluetooth.BluetoothDevice device : pairedDevices) {
 				//deviceList.add(device.getName() + "\n" + device.getAddress());
 				deviceList.add(device);
 			}
@@ -226,11 +250,11 @@ public class BluetoothHelper implements Runnable {
 				hideProgress();
 
 				// show found devices
-				((MainActivity) context).startDeviceListDialog("Paired Devices", foundDevices);
+				((MainActivity) context).startDeviceListDialog("Found Devices", foundDevices);
 
 			} else if(BluetoothDevice.ACTION_FOUND.equals(action)) {
 				//bluetooth device found
-				BluetoothDevice device = (BluetoothDevice) intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+				backport.android.bluetooth.BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 
 				// insert this device into foundDevice array list
 				foundDevices.add(device);
@@ -246,7 +270,7 @@ public class BluetoothHelper implements Runnable {
 	 *
 	 * @return ArrayList<BluetoothDevice>
 	 */
-	public ArrayList<BluetoothDevice> getFoundDevices() {
+	public ArrayList<backport.android.bluetooth.BluetoothDevice> getFoundDevices() {
 		return foundDevices;
 	}
 
@@ -255,7 +279,7 @@ public class BluetoothHelper implements Runnable {
 	 *
 	 * @param device
 	 */
-	public void connectToBTDevice(BluetoothDevice device) {
+	public void connectToBTDevice(backport.android.bluetooth.BluetoothDevice device) {
 		// get bluetooth device by address
 		bluetoothDevice = bluetoothAdapter.getRemoteDevice(device.getAddress());
 
@@ -266,8 +290,15 @@ public class BluetoothHelper implements Runnable {
 		// create new thread
 		Thread bluetoothConnectThread = new Thread(this);
 		// start thread
-		bluetoothConnectThread.start();
+		//bluetoothConnectThread.start();
 		//pairToDevice(mBluetoothDevice); This method is replaced by progress dialog with thread
+
+		// ======= BluetoothChatService =======
+		BluetoothChatService mChatService = new BluetoothChatService(context, mHandler);
+		String str = "abC";
+		mChatService.start();
+		mChatService.connect(bluetoothDevice);
+		mChatService.write(str.getBytes());
 	}
 
 	// thread to connect with bluetooth device
@@ -279,7 +310,7 @@ public class BluetoothHelper implements Runnable {
 			mBluetoothSocket = bluetoothDevice.createRfcommSocketToServiceRecord(uuid);
 
 			// cancel discovering
-			//cancelDiscovery(context);
+			cancelDiscovery(context);
 			// already cancelled
 
 			// connect through socket
@@ -344,7 +375,7 @@ public class BluetoothHelper implements Runnable {
 	 */
 	public void disconnectBTConnection() {
 		// check if connected to a bluetooth device
-		if(mBluetoothSocket.isConnected()) {
+		/*if(mBluetoothSocket.isConnected()) {
 			// disconnect
 			try {
 				mBluetoothSocket.close();
@@ -353,7 +384,7 @@ public class BluetoothHelper implements Runnable {
 				e.printStackTrace();
 				Log.d(TAG, "error while disconnecting device", e);
 			}
-		}
+		}*/
 	}
 
 	/**
@@ -362,7 +393,7 @@ public class BluetoothHelper implements Runnable {
 	 */
 	public void sendDataToBTDevice(String str) {
 		// check if connected to a bluetooth device
-		if(mBluetoothSocket.isConnected()) {
+		//if(mBluetoothSocket.isConnected()) {
 			try {
 				outputStream.write(str.getBytes());
 				Log.d(TAG, "data send: " + str);
@@ -370,14 +401,14 @@ public class BluetoothHelper implements Runnable {
 				e.printStackTrace();
 				Log.d(TAG, "data could not be sent", e);
 			}
-		}
+		//}
 	}
 
 	private Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
 			hideProgress();
-			Log.d(BluetoothHelper.TAG, "connected with device");
+			Log.d(BluetoothHelper.TAG, "connected with device: " + msg.toString());
 		}
 	};
 

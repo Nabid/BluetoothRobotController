@@ -23,5 +23,5 @@ dependencies {
 	compile fileTree(include: ['*.jar'], dir: 'libs')
 	compile 'com.android.support:appcompat-v7:21.0.3'
 	compile files('libs/picasso-2.3.4.jar')
-
+	compile files('libs/backport-android-bluetooth2.jar')
 }

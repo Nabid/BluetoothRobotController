@@ -64,6 +64,7 @@ public class ConnectFragment extends Fragment {
 
 		// get new instance of BluetoothHelper class
 		bluetoothHelper = BluetoothHelper.getInstance(getActivity());
+		bluetoothHelper.setBluetoothAdapter();
 
 		return rootView;
 	}
@@ -101,8 +102,8 @@ public class ConnectFragment extends Fragment {
 		btnBTPairedDevices.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ArrayList<BluetoothDevice> deviceList = bluetoothHelper.getPairedDevices();
-				for(BluetoothDevice tmp : deviceList) {
+				ArrayList<backport.android.bluetooth.BluetoothDevice> deviceList = bluetoothHelper.getPairedDevices();
+				for(backport.android.bluetooth.BluetoothDevice tmp : deviceList) {
 					Log.d("paired_device", "name: " + tmp.getName() + ", address: " + tmp.getAddress());
 				}
 
@@ -133,6 +134,7 @@ public class ConnectFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				bluetoothHelper.makeDiscoverable();
+				Log.d(BluetoothHelper.TAG, "bluetooth is discoverable");
 			}
 		});
 	}

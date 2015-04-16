@@ -23,7 +23,7 @@ public class DeviceListDialog extends DialogFragment {
 	public static DeviceListDialog deviceListDialog = null;
 
 	// device array list
-	private static ArrayList<BluetoothDevice> deviceArrayList;
+	private static ArrayList<backport.android.bluetooth.BluetoothDevice> deviceArrayList;
 	// title of the didalog
 	private static String title;
 	// charsequence of item
@@ -33,7 +33,7 @@ public class DeviceListDialog extends DialogFragment {
 	}
 
 	// new instance
-	public static DeviceListDialog getInstance(String title, ArrayList<BluetoothDevice> deviceArrayList) {
+	public static DeviceListDialog getInstance(String title, ArrayList<backport.android.bluetooth.BluetoothDevice> deviceArrayList) {
 		DeviceListDialog.deviceArrayList = deviceArrayList;
 		DeviceListDialog.title = title;
 

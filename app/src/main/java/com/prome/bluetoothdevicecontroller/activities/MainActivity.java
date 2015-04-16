@@ -106,10 +106,10 @@ public class MainActivity extends ActionBarActivity {
 			case BluetoothHelper.REQUEST_ENABLE_BT:
 				if(resultCode == RESULT_OK) {
 					// result ok
-					Log.d("bluetooth", "resultCode: OK ->" + resultCode);
+					Log.d(BluetoothHelper.TAG, "bluetooth enabled, resultCode: OK ->" + resultCode);
 				} else if(resultCode == RESULT_CANCELED) {
 					// result cancelled
-					Log.d("bluetooth", "resultCode: CANCELED ->" + resultCode);
+					Log.d(BluetoothHelper.TAG, "bluetooth enable error, resultCode: CANCELED ->" + resultCode);
 				}
 				break;
 
@@ -145,7 +145,7 @@ public class MainActivity extends ActionBarActivity {
 	 * @param title
 	 * @param deviceList
 	 */
-	public void startDeviceListDialog(String title, ArrayList<BluetoothDevice> deviceList) {
+	public void startDeviceListDialog(String title, ArrayList<backport.android.bluetooth.BluetoothDevice> deviceList) {
 		DeviceListDialog.getInstance(title, deviceList)
 				.show(getSupportFragmentManager(), DeviceListDialog.TAG);
 	}
